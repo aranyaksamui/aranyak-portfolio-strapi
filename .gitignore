@@ -122,6 +122,7 @@ coverage
 ############################
 
 .env
+.env.example
 license.txt
 exports
 .strapi
@@ -129,3 +130,10 @@ dist
 build
 .strapi-updater.json
 .strapi-cloud.json
+prod-ca-2021.crt
+
+.gitignore
+.env
+.env.production
+render.production.yaml
+supabase-ca.*

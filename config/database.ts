@@ -2,8 +2,6 @@ import path from "path";
 
 export default ({ env }) => {
     const client = env("DATABASE_CLIENT", "sqlite");
-    console.log("DB HOST:", env("DATABASE_HOST"));
-    console.log("DB PORT:", env.int("DATABASE_PORT"));
     const connections = {
         mysql: {
             connection: {

@@ -1,14 +1,11 @@
+const allowedOrigins = () => {
+    if (process.env.NODE_ENV === "development") return [process.env.DEV_CLIENT_URL];
+    else if (process.env.NODE_ENV === "production") return [process.env.CLIENT_URL];
+};
+
 export default [
     "strapi::logger",
     "strapi::errors",
-    "strapi::security",
-    "strapi::cors",
-    "strapi::poweredBy",
-    "strapi::query",
-    "strapi::body",
-    "strapi::session",
-    "strapi::favicon",
-    "strapi::public",
     {
         name: "strapi::security",
         config: {
@@ -23,4 +20,18 @@ export default [
             },
         },
     },
+    {
+        name: "strapi::cors",
+        config: {
+            origin: allowedOrigins(),
+            methods: ["GET"],
+            headers: ["Content-Type", "Authorization", "Origin"],
+        },
+    },
+    "strapi::poweredBy",
+    "strapi::query",
+    "strapi::body",
+    "strapi::session",
+    "strapi::favicon",
+    "strapi::public",
 ];

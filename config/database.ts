@@ -1,7 +1,7 @@
 import path from "path";
 
 export default ({ env }) => {
-    const client = env("DATABASE_CLIENT", "sqlite");
+    const client = env("DATABASE_CLIENT", "mysql");
     const connections = {
         mysql: {
             connection: {
@@ -32,7 +32,7 @@ export default ({ env }) => {
                 ssl: env.bool("DATABASE_SSL", false)
                     ? {
                           rejectUnauthorized: env.bool("DATABASE_SSL_REJECT_UNAUTHORIZED", false),
-                          ca: env("DB_CA_CERT", "").replace(/\\n/g, "\n"), // Handle newlines
+                          ca: env("DB_CA_CERT", "") ? env("DB_CA_CERT", "").replace(/\\n/g, "\n") : undefined
                       }
                     : false,
                 schema: env("DATABASE_SCHEMA", "public"),

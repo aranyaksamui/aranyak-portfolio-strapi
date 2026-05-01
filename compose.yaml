@@ -1,0 +1,82 @@
+name: my-portfolio-stack
+
+services:
+  # Database
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    ports: 
+      - "5432:5432"
+    volumes:
+      - local_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME} -d ${DATABASE_NAME}"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  # Backend (Strapi NodeJS)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "1337:1337"
+    environment:
+      # Nodejs specific
+      NODE_ENV: ${NODE_ENV}
+      HOST: ${HOST}
+      PORT: ${PORT}
+      DEV_CLIENT_URL: ${DEV_CLIENT_URL}
+      # Database Connection
+      DATABASE_CLIENT: ${DATABASE_CLIENT}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_SSL: ${DATABASE_SSL}
+      # Strapi env
+      APP_KEYS: ${APP_KEYS}
+      API_TOKEN_SALT: ${API_TOKEN_SALT}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      JWT_SECRET: ${JWT_SECRET}
+    volumes:
+      - .:/app                        # Bind mounting
+      - /app/node_modules
+      - /app/build
+      - /app/.cache
+    depends_on:
+      postgres:
+        condition: service_healthy    # Waits for the healthcheck (in postgres service)
+    
+  # Frontend (ViteJS)
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ../frontend/.env
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../frontend:/app              # Bind mounting
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  local_db_data:
+
+      
+
+
+
+

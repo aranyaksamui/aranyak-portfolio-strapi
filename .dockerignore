@@ -1,0 +1,14 @@
+# Dependencies and Logs
+/node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Envs
+.env
+.env.*
+
+# Git
+.git/
+.gitignore

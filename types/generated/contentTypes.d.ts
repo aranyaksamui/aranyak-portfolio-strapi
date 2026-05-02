@@ -437,8 +437,7 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
     Media: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
-    > &
-      Schema.Attribute.Required;
+    >;
     publishedAt: Schema.Attribute.DateTime;
     skills: Schema.Attribute.Relation<'manyToMany', 'api::skill.skill'>;
     SubTitle: Schema.Attribute.String &
